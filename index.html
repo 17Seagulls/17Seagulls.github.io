@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script async src="https://tenor.com/embed.js"></script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Important Question</title>
@@ -31,6 +30,14 @@
     margin-bottom: 30px;
   }
 
+  #buttonContainer {
+  display: flex;
+  gap: 20px;
+  position: relative; /* first No stays in normal flow */
+  justify-content: center; /* center buttons horizontally */
+  align-items: center; /* align vertically */
+}
+
   button {
     font-size: 20px;
     padding: 12px 26px;
@@ -40,25 +47,18 @@
     transition: transform 0.2s ease, left 0.2s ease, top 0.2s ease;
   }
 
-  #buttonContainer {
-    position: relative;
-    height: 120px;
-    width: 300px;
-  }
-
   .yes {
     background-color: #ff4d6d;
     color: white;
-    margin-right: 20px;
   }
 
   .no {
     background-color: #b0b0b0;
     color: white;
-    position: fixed;   /* changed from absolute */
-    left: 54%;
-    top: 63.5%;
-    transform: translate(-50%, -50%);
+  }
+
+  .dodging {
+    position: fixed; /* new No button dodges freely */
   }
 </style>
 </head>
@@ -79,18 +79,19 @@
 </div>
 
 <script>
-  let yesScale = 1;
-  let noClicks = 0;
+let yesScale = 1;
+let noClicks = 0;
+let dodgingBtn = null; // reference to the new dodging No button
 
-  function yesClicked() {
+function yesClicked() {
   const sound = document.getElementById("yesSound");
   sound.currentTime = 0;
   sound.play();
 
-  // Hide main content instead of replacing body
+  // hide main content
   document.getElementById("mainContent").style.display = "none";
 
-  // Create celebration container
+  // celebration content
   const celebration = document.createElement("div");
   celebration.innerHTML = `
     <div style="
@@ -109,41 +110,57 @@
   document.body.appendChild(celebration);
 }
 
-  function noClicked() {
-    noClicks++;
+function noClicked(e) {
+  noClicks++;
 
-    growYes();
+  growYes(0.25);
 
-    if (noClicks % 5 === 0) {
-      dodgeNo();
-    }
+  if (noClicks === 5 && !dodgingBtn) {
+    // Hide the original No button
+    const firstNo = document.getElementById("noBtn");
+    firstNo.remove(); // or firstNo.remove();
+
+    // Create new dodging No button
+    dodgingBtn = document.createElement("button");
+    dodgingBtn.textContent = "No";
+    dodgingBtn.className = "no dodging";
+    dodgingBtn.onclick = () => dodgeNo();
+    document.body.appendChild(dodgingBtn);
+
+    // Random initial position
+    dodgeNo();
+  } else if (dodgingBtn) {
+    // Subsequent clicks dodge
+    dodgeNo();
   }
+}
 
-  function growYes() {
-    yesScale += 0.25;
-    const yesBtn = document.getElementById("yesBtn");
-    yesBtn.style.transform = `scale(${yesScale})`;
-  }
+function growYes(n) {
+  yesScale += n;
+  const yesBtn = document.getElementById("yesBtn");
+  yesBtn.style.transform = `scale(${yesScale})`;
+}
 
-  function dodgeNo() {
-    const noBtn = document.getElementById("noBtn");
+function dodgeNo() {
 
-  // Button size
-  const btnWidth = noBtn.offsetWidth;
-  const btnHeight = noBtn.offsetHeight;
+  growYes(2);
 
-  // Max positions so button stays inside viewport
+  if (!dodgingBtn) return;
+  const btn = dodgingBtn;
+
+  const btnWidth = btn.offsetWidth;
+  const btnHeight = btn.offsetHeight;
+
   const maxX = window.innerWidth - btnWidth;
   const maxY = window.innerHeight - btnHeight;
 
-  // Random position within viewport
   const randomX = Math.random() * maxX;
   const randomY = Math.random() * maxY;
 
-  noBtn.style.left = `${randomX}px`;
-  noBtn.style.top = `${randomY}px`;
-  noBtn.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
-  }
+  btn.style.left = `${randomX}px`;
+  btn.style.top = `${randomY}px`;
+  btn.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
+}
 </script>
 
 </body>
