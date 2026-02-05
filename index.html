@@ -1,37 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Special Question</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Important Question</title>
+
 <style>
   body {
-    font-family: sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     text-align: center;
-    padding: 50px;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: #fff6f8;
   }
+
+  h1 {
+    margin-bottom: 20px;
+  }
+
   img {
     max-width: 80%;
-    height: auto;
-    border-radius: 15px;
+    max-height: 40vh;
+    border-radius: 20px;
+    margin-bottom: 30px;
   }
+
   button {
-    font-size: 18px;
-    padding: 10px 20px;
-    margin: 20px;
+    font-size: 20px;
+    padding: 12px 26px;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     cursor: pointer;
+    transition: transform 0.2s ease, left 0.2s ease, top 0.2s ease;
   }
-  .yes { background-color: #4CAF50; color: white; }
-  .no { background-color: #f44336; color: white; }
+
+  .yes {
+    background-color: #ff4d6d;
+    color: white;
+    margin-right: 20px;
+  }
+
+  .no {
+    background-color: #b0b0b0;
+    color: white;
+    position: absolute;
+    left: 50%;
+    top: 65%;
+    transform: translate(-50%, -50%);
+  }
 </style>
 </head>
+
 <body>
-  <img src="image.jpg" alt="Cute Image">
-  <div>
-    <button class="yes" onclick="alert('Yay! ❤️')">Yes</button>
-    <button class="no" onclick="alert('Oh no 😢')">No</button>
-  </div>
+
+<h1>Will you go on an adventure with me? 💕</h1>
+
+<img src="image.jpg" alt="Us ❤️" />
+
+<button id="yesBtn" class="yes" onclick="yesClicked()">Yes</button>
+<button id="noBtn" class="no" onclick="noClicked()">No</button>
+
+<script>
+  let yesScale = 1;
+  let noClicks = 0;
+
+  function yesClicked() {
+    document.body.innerHTML = `
+      <h1>YAY!!! 💖🥰</h1>
+      <p style="font-size:22px">I knew it 😌</p>
+    `;
+  }
+
+  function noClicked() {
+    noClicks++;
+
+    growYes();
+
+    if (noClicks % 5 === 0) {
+      dodgeNo();
+    }
+  }
+
+  function growYes() {
+    yesScale += 0.25;
+    const yesBtn = document.getElementById("yesBtn");
+    yesBtn.style.transform = `scale(${yesScale})`;
+  }
+
+  function dodgeNo() {
+    const noBtn = document.getElementById("noBtn");
+
+    const btnWidth = noBtn.offsetWidth;
+    const btnHeight = noBtn.offsetHeight;
+
+    const maxX = window.innerWidth - btnWidth;
+    const maxY = window.innerHeight - btnHeight;
+
+    const randomX = Math.random() * maxX;
+    const randomY = Math.random() * maxY;
+
+    noBtn.style.left = `${randomX}px`;
+    noBtn.style.top = `${randomY}px`;
+    noBtn.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
+  }
+</script>
+
 </body>
 </html>
