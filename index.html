@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script async src="https://tenor.com/embed.js"></script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Important Question</title>
@@ -52,11 +53,11 @@
   }
 
   .no {
-     background-color: #b0b0b0;
-     color: white;
-    position: absolute;
-    left: 10%;
-    top: 10%;
+    background-color: #b0b0b0;
+    color: white;
+    position: fixed;   /* changed from absolute */
+    left: 54%;
+    top: 63.5%;
     transform: translate(-50%, -50%);
   }
 </style>
@@ -64,23 +65,49 @@
 
 <body>
 
-<h1>Will you be my valentine? 💕</h1>
+<audio id="yesSound" src="Yippee Sound Effect.mp3" preload="auto" loop></audio>
 
-<img src="image.jpg" alt="Us ❤️" />
+<div id="mainContent">
+    <h1>Will you be my valentine? 💕</h1>
 
-<button id="yesBtn" class="yes" onclick="yesClicked()">Yes</button>
-<button id="noBtn" class="no" onclick="noClicked()">No</button>
+    <img src="image.jpg" alt="Us ❤️" />
+
+    <div id="buttonContainer">
+        <button id="yesBtn" class="yes" onclick="yesClicked()">Yes</button>
+        <button id="noBtn" class="no" onclick="noClicked()">No</button>
+    </div>
+</div>
 
 <script>
   let yesScale = 1;
   let noClicks = 0;
 
   function yesClicked() {
-    document.body.innerHTML = `
+  const sound = document.getElementById("yesSound");
+  sound.currentTime = 0;
+  sound.play();
+
+  // Hide main content instead of replacing body
+  document.getElementById("mainContent").style.display = "none";
+
+  // Create celebration container
+  const celebration = document.createElement("div");
+  celebration.innerHTML = `
+    <div style="
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      height:100vh;
+      text-align:center;
+    ">
       <h1>YAY!!! 💖🥰</h1>
+      <img src="https://tenor.com/view/cat-kitten-kitty-silly-cat-silly-kitten-gif-26276762.gif" style="max-width:300px;">
       <p style="font-size:22px">I knew it 😌</p>
-    `;
-  }
+    </div>
+  `;
+  document.body.appendChild(celebration);
+}
 
   function noClicked() {
     noClicks++;
@@ -101,26 +128,23 @@
   function dodgeNo() {
     const noBtn = document.getElementById("noBtn");
 
-    const btnWidth = noBtn.offsetWidth;
-    const btnHeight = noBtn.offsetHeight;
+  // Button size
+  const btnWidth = noBtn.offsetWidth;
+  const btnHeight = noBtn.offsetHeight;
 
-    const maxX = window.innerWidth - btnWidth;
-    const maxY = window.innerHeight - btnHeight;
+  // Max positions so button stays inside viewport
+  const maxX = window.innerWidth - btnWidth;
+  const maxY = window.innerHeight - btnHeight;
 
-    const randomX = Math.random() * maxX;
-    const randomY = Math.random() * maxY;
+  // Random position within viewport
+  const randomX = Math.random() * maxX;
+  const randomY = Math.random() * maxY;
 
-    noBtn.style.left = `${randomX}px`;
-    noBtn.style.top = `${randomY}px`;
-    noBtn.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
+  noBtn.style.left = `${randomX}px`;
+  noBtn.style.top = `${randomY}px`;
+  noBtn.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
   }
 </script>
 
 </body>
-
 </html>
-
-
-
-
-
