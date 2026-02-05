@@ -32,7 +32,7 @@
 
   #buttonContainer {
   display: flex;
-  gap: 60px;
+  gap: 80px;
   position: relative; /* first No stays in normal flow */
   justify-content: center; /* center buttons horizontally */
   align-items: center; /* align vertically */
@@ -90,6 +90,11 @@ function yesClicked() {
 
   // hide main content
   document.getElementById("mainContent").style.display = "none";
+
+  if (dodgingBtn) {
+    dodgingBtn.remove();
+    dodgingBtn = null;
+  }
 
   // celebration content
   const celebration = document.createElement("div");
@@ -164,5 +169,4 @@ function dodgeNo() {
 </script>
 
 </body>
-
 </html>
